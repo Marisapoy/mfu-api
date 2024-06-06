@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Marisapoy/mfu-api/issues"
   },
-  "homepage": "https://github.com/Marisapoy/mfu-api#readme"
+  "homepage": "https://github.com/Marisapoy/mfu-api#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }
