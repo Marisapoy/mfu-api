@@ -1,4 +1,6 @@
+const bcryptjs = require('bcryptjs')
 const db = require('../models')
+const jwt = require('jsonwebtoken')
 
 //otp
 const verifyOtpController = async (req, res) => {
@@ -13,8 +15,28 @@ const activateUserController = async (req, res) => {
 
 //user
 const userLoginController = async (req, res) => {
-  console.log('req', req, req.params);
-  return res.send()
+  const { email, password } = req.body
+  const tragetUser = await db.user.findOne({ where: { email: email } })
+  if (!tragetUser) {
+    res.status(400).send({ massage: "Username or password is wrong." })
+  } else {
+    const isCorrectPassword = bcryptjs.compareSync(password, tragetUser.password)
+    if (isCorrectPassword) {
+      const payload = {
+        name: tragetUser.name,
+        email: tragetUser.email,
+        id: tragetUser.id,
+      }
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 })
+
+      res.send({
+        token: token,
+        message: "Login successful."
+      })
+    } else {
+      res.status(400).send({ massage: "Username or password is wrong." })
+    }
+  }
 }
 
 const userLogoutController = async (req, res) => {
@@ -23,8 +45,21 @@ const userLogoutController = async (req, res) => {
 }
 
 const userRegisterController = async (req, res) => {
-  console.log('req', req, req.params);
-  return res.send()
+  const { username, email, password } = req.body
+  const tragetUser = await db.user.findOne({ where: { email: email } })
+  if (tragetUser) {
+    res.status(400).send({ message: "Username already taken." })
+  } else {
+    const salt = bcryptjs.genSaltSync(12)
+    const hashedPassword = bcryptjs.hashSync(password, salt)
+
+    await db.user.create({
+      email: email,
+      password: hashedPassword,
+      username: username
+    })
+    res.status(201).send({ massage: "User created" })
+  }
 }
 
 const userForgetPasswordController = async (req, res) => {
