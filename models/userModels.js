@@ -21,6 +21,9 @@ module.exports = (sequelize, dataTypes) => {
     image: {
       type: dataTypes.STRING(100)
     },
+    isActive: {
+      type: dataTypes.BOOLEAN
+    },
     description: {
       type: dataTypes.TEXT
     },

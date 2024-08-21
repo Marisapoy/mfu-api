@@ -4,13 +4,15 @@
     "password": "Admin123456",
     "database": "mfu-project",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+07:00"
   },
   "production": {
     "username": "root",
     "password": "Admin123456",
     "database": "mfu-project",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+07:00"
   }
 }
